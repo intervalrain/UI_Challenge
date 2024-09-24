@@ -1,7 +1,6 @@
 "use client";
 
-import { addMessage, Message } from "@/store/chatSlice";
-import { RootState } from "@/store/store";
+import { Message } from "@/store/chatSlice";
 import React, {
   ChangeEvent,
   KeyboardEvent,
@@ -16,6 +15,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import ExpandableButton from "./ExpandableButton";
+import { useChat } from "@/store/hooks";
 
 const TopKIcon: React.FC<{ size?: number }> = ({ size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,87 +29,9 @@ const TopKIcon: React.FC<{ size?: number }> = ({ size = 24 }) => (
   </svg>
 )
 
-const initMessages: Message[] = [
-  {
-    role: "user",
-    content: `你好！請問 **Markdown** 的標題語法是什麼？`,
-  },
-  {
-    role: "assistant",
-    content: `Markdown 的標題語法很簡單，使用 \`#\` 符號來表示標題層級：
-  
-  - \`#\` 表示一級標題
-  - \`##\` 表示二級標題
-  - \`###\` 表示三級標題
-
-例如：
-
-\`\`\`markdown
-# 這是一級標題
-## 這是二級標題
-### 這是三級標題
-\`\`\`
-
-渲染結果會如下：
-
-# 這是一級標題
-## 這是二級標題
-### 這是三級標題
-`,
-  },
-  {
-    role: "user",
-    content: `了解了！那如何在 **Markdown** 裡插入數學公式？`,
-  },
-  {
-    role: "assistant",
-    content: `在 Markdown 中，你可以使用 LaTeX 語法來插入數學公式。比如：
-
-行內公式使用 \`$...\`，例如：
-
-\`$E = mc^2$\` 會渲染為：$E = mc^2$
-
-塊級公式使用 \`\$\$\`，例如：
-
-\`\`\`latex
-$$
-\\frac{a}{b} + \\sqrt{c^2 + d^2}
-$$
-\`\`\`
-
-這會渲染為：
-
-$$
-\\frac{a}{b} + \\sqrt{c^2 + d^2}
-$$
-`,
-  },
-  {
-    role: "user",
-    content: `太棒了！那能告訴我如何用 Markdown 插入代辦列表嗎？`,
-  },
-  {
-    role: "assistant",
-    content: `當然可以！代辦列表使用 \`-\` 或 \`*\` 加上 \`[ ]\` 或 \`[x]\` 來表示未完成或已完成的任務。例如：
-
-\`\`\`markdown
-- [ ] 未完成的任務
-- [x] 已完成的任務
-\`\`\`
-
-渲染結果如下：
-
-- [ ] 未完成的任務
-- [x] 已完成的任務
-`,
-  },
-];
-
 const ChatWindow: React.FC = () => {
   const [input, setInput] = useState<string>("");
-  const [messages, setMessages] = useState<Message[]>([]);
-  // const messages = useSelector((state: RootState) => state.chat.messages);
-  const dispatch = useDispatch();
+  const { messages, addMessage, setMessages } = useChat();
   const [rows, setRows] = useState(1);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -124,12 +46,12 @@ const ChatWindow: React.FC = () => {
     e.preventDefault();
     if (input.trim()) {
       const userMessage: Message = { role: "user", content: input };
-      dispatch(addMessage(userMessage));
+      addMessage(userMessage);
       const response: Message = {
         role: "assistant",
         content: `This is a mock response to ${input}`,
       };
-      dispatch(addMessage(response));
+      addMessage(response);
       setInput("");
     }
   };
@@ -161,7 +83,7 @@ const ChatWindow: React.FC = () => {
       // timestamp: new Date(),
     };
 
-    setMessages((prevMessages) => [...prevMessages, botMessage]);
+    addMessage(botMessage);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -179,7 +101,7 @@ const ChatWindow: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gray-200 dark:bg-gray-700">
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message, index) => (
           <div
@@ -192,7 +114,7 @@ const ChatWindow: React.FC = () => {
               className={`inline-block p-2 rounded-lg ${
                 message.role === "user"
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-black"
+                  : "bg-gray-800 text-white dark:bg-gray-200 dark:text-black"
               }`}
             >
               <ReactMarkdown
@@ -214,7 +136,7 @@ const ChatWindow: React.FC = () => {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             rows={rows}
-            className="w-full px-4 pt-2 border-t border-l border-r rounded-tl-xl rounded-tr-xl resize-none bg-blue-50 
+            className="w-full px-4 pt-2 border-t border-l border-r rounded-tl-xl rounded-tr-xl resize-none bg-blue-50
               focus:outline-none"
             placeholder="Talk to DSM Bot..."
           />

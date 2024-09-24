@@ -20,7 +20,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-blue-400 to-blue-200 text-gray-900"
-          : "hover:bg-gray-200 text-gray-600"
+          : "hover:bg-gray-800 text-gray-600 dark:hover:bg-gray-200"
       }`}
     >
       {icon}

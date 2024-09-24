@@ -12,9 +12,12 @@ import {
   SquareLibrary,
   ChevronFirst,
   ChevronLast,
+  Sun, 
+  Moon
 } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 import Avatar from "@/utils/Avatar";
+import { useTheme } from "@/store/hooks";
 
 interface NavItem {
   href: string;
@@ -31,16 +34,12 @@ const Sidebar: React.FC = () => {
     { href: "/assistant", label: "Assistant", icon: <Bot size={20} /> },
     { href: "/document", label: "Document", icon: <FileText size={20} /> },
     { href: "/settings", label: "Settings", icon: <Settings size={20} /> },
-    {
-      href: "/news",
-      label: "News",
-      icon: <Newspaper size={20} />,
-      alert: true,
-    },
+    { href: "/news", label: "News", icon: <Newspaper size={20} />, alert: true, },
     { href: "/library", label: "Library", icon: <SquareLibrary size={20} /> },
   ];
 
   const [expanded, setExpanded] = useState(true);
+  const { theme, setTheme } = useTheme();
   const user = {
     name: "Rain Hu",
     email: "intervalrain@gmail.com",
@@ -48,7 +47,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`bg-gray-800 text-white transition-all duration-300 ${
+      className={`bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100 transition-all duration-300 ${
         expanded ? "w-64" : "w-16"
       }`}
     >
@@ -63,7 +62,7 @@ const Sidebar: React.FC = () => {
         )}
         <button
           onClick={() => setExpanded((expanded) => !expanded)}
-          className="p-1.5 rounded-lg bg-gray-700 hover:bg-gray-600"
+          className="p-1.5 rounded-lg bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600"
         >
           {expanded ? <ChevronFirst /> : <ChevronLast />}
         </button>
@@ -95,9 +94,15 @@ const Sidebar: React.FC = () => {
           >
             <div className="leading-4">
               <h4 className="font-semibold">{user.name}</h4>
-              <span className="text-xs text-gray-600">{user.email}</span>
+              <span className="text-xs text-gray-400">{user.email}</span>
             </div>
-            <div className="mr-2"></div>
+            <div className="mr-2">
+              <button
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="p-2 rounded-full bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600">
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
