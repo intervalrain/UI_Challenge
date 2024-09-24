@@ -17,8 +17,8 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="bg-gray-800 text-white w-64 min-h-screen p-4">
-      <nav>
+    <aside className="bg-gray-800 text-white w-64 overflow-y-auto">
+      <nav className="p-4">
         <ul className="space-y-2">
           {navItems.map((item) => (
             <li key={item.href}>
