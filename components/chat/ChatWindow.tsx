@@ -1,6 +1,8 @@
+'use client'
+
 import React from 'react'
 
-const ChatWindow = () => {
+const ChatWindow: React.FC = () => {
   return (
     <div>ChatWindow</div>
   )

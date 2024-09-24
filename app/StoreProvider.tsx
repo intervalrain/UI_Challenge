@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { ReactNode } from 'react';
 
-const StoreProvider = () => {
-  return (
-    <div>StoreProvider</div>
-  )
+interface StoreProviderProps {
+    children: ReactNode;
 }
 
-export default StoreProvider
+const StoreProvider: React.FC<StoreProviderProps> = ({ children })  => {
+  return (
+    <div>{children}</div>
+  );
+};
+
+export default StoreProvider;
