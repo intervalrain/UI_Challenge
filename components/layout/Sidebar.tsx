@@ -1,22 +1,38 @@
-import Link from 'next/link';
-import React from 'react';
+"use client";
 
-const routes = [
-  { path: '/chat', label: 'Chat' },
-  { path: '/assistant', label: 'Assistant' },
-  { path: '/document', label: 'Document' },
-  { path: '/settings', label: 'Settings' },
-  { path: '/news', label: 'News' },
-  { path: '/library', label: 'Library' },
-]
+import Link from "next/link";
+import React from "react";
+import { usePathname } from "next/navigation";
 
 const Sidebar: React.FC = () => {
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: "/chat", label: "Chat" },
+    { href: "/assistant", label: "Assistant" },
+    { href: "/document", label: "Document" },
+    { href: "/settings", label: "Settings" },
+    { href: "/news", label: "News" },
+    { href: "/library", label: "Library" },
+  ];
+
   return (
     <aside className="bg-gray-800 text-white w-64 min-h-screen p-4">
       <nav>
         <ul className="space-y-2">
-          {routes.map(route => (
-            <li><Link href={route.path} className="block p-2 hover:bg-gray-700 rounded">{route.label}</Link></li>
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className={`block p-2 rounded
+                  ${pathname === item.href
+                    ? 'bg-blue-600 text-white'
+                    : 'hover:bg-gray-700'
+                  }`}
+              >
+                {item.label}
+              </Link>
+            </li>
           ))}
         </ul>
       </nav>
