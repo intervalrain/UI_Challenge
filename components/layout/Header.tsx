@@ -7,7 +7,7 @@ const Header: React.FC = () => {
       <Link href="/" className="text-2xl font-semibold">AI ChatBot</Link>
       <nav>
         <Link href="/about" className="mr-4">About</Link>
-        <Link href="contact" className="mr-4">Contact</Link>
+        <Link href="mailto:intervalrain@gmail.com" className="mr-4">Contact</Link>
       </nav>
     </header>
   );
