@@ -48,7 +48,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`bg-gray-800 text-white transition-all duration-300 overflow-y-auto ${
+      className={`bg-gray-800 text-white transition-all duration-300 ${
         expanded ? "w-64" : "w-16"
       }`}
     >
